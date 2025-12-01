@@ -30,6 +30,7 @@ When someone keys up and talks — W*A*L*t*E*R hears it and writes it down.
 - **Zero Cloud Dependency:** Everything runs 100% locally on your machine.
 
 ### Requirements
+- **Operating System:** Linux (the module relies on Linux-specific commands and APIs).
 - SDR++ (The module is built against the main branch)
 - A CUDA-capable NVIDIA GPU is recommended for Whisper.
 - [Ollama](https://ollama.com/) installed and running.
