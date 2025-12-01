@@ -1,4 +1,4 @@
-# SIGINT AI (formerly VoxHunt + W.A.L.T.E.R.)
+# VoxHunt + W.A.L.T.E.R.
 
 **AI-powered voice hunting and transcription for SDR++**
 
