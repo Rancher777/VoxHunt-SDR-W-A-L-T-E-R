@@ -33,7 +33,7 @@
 SDRPP_MOD_INFO{
     /* Name:            */ "SIGINT AI",
     /* Description:     */ "AI-powered SIGINT module",
-    /* Author:          */ "Gemini",
+    /* Author:          */ "Gemini & Rancher777",
     /* Version:         */ 0, 1, 0,
     /* Max instances    */ 1
 };
@@ -262,7 +262,7 @@ private:
                         if (atakAiActive && ollamaRunning && modelsLoaded && !availableModels.empty()) {
                             // Lazy initialize Ollama messages with a system prompt for context
                             if (!ollamaInitialized) {
-                                ollamaMessages.push_back(json::parse(R"({"role": "system", "content": "You are a U.S. Navy S.E.A.L. on a covert SIGINT operation. Your callsign is ATAK. Be brief and professional. Report only significant, actionable intelligence. Otherwise, learn from the OPERATOR's instructions. When responding to the OPERATOR, be concise. End all transmissions with OVER."})"));
+                                ollamaMessages.push_back(json::parse(R"({"role": "system", "content": "You are a U.S. Navy S.E.A.L. on a covert SIGINT operation. Your callsign is RADAR. Be brief and professional. Report only significant, actionable intelligence. Otherwise, learn from the OPERATOR's instructions. When responding to the OPERATOR, be concise. End all transmissions with OVER."})"));
                                 ollamaInitialized = true;
                             }
 
@@ -289,7 +289,7 @@ private:
                                 std::string ollamaResponse = httpClient.post("http://localhost:11434/api/chat", ollamaPayload.dump()); // Use /api/chat for messages array
                                 json responseJson = json::parse(ollamaResponse);
                                 std::string aiText = responseJson["message"]["content"].get<std::string>();
-                                logMessages.push_back("[ATAK AI] " + aiText);
+                                logMessages.push_back("[RADAR] " + aiText);
 
                                 // Add AI response to Ollama messages
                                 json assistantMessage;
@@ -297,7 +297,7 @@ private:
                                 assistantMessage["content"] = aiText;
                                 ollamaMessages.push_back(assistantMessage);
                             } catch (const std::exception& e) {
-                                logMessages.push_back("[ATAK AI Error] HTTP or JSON error: " + std::string(e.what()));
+                                logMessages.push_back("[AI Error] HTTP or JSON error: " + std::string(e.what()));
                             }
                         }
                     }
@@ -417,7 +417,7 @@ private:
                         tempMessages.push_back(userMessage);
 
                         if (!ollamaInitialized) {
-                            tempMessages.insert(tempMessages.begin(), json::parse(R"({"role": "system", "content": "You are a U.S. Navy S.E.A.L. on a covert SIGINT operation. Your callsign is ATAK. Be brief and professional. Report only significant, actionable intelligence. Otherwise, learn from the OPERATOR's instructions. When responding to the OPERATOR, be concise. End all transmissions with OVER."})"));
+                            tempMessages.insert(tempMessages.begin(), json::parse(R"({"role": "system", "content": "You are a U.S. Navy S.E.A.L. on a covert SIGINT operation. Your callsign is RADAR. Be brief and professional. Report only significant, actionable intelligence. Otherwise, learn from the OPERATOR's instructions. When responding to the OPERATOR, be concise. End all transmissions with OVER."})"));
                             ollamaInitialized = true;
                         }
 
@@ -439,7 +439,7 @@ private:
                             aiText = responseJson["message"]["content"].get<std::string>();
                             success = true;
                         } catch (const std::exception& e) {
-                            errorMessage = "[ATAK AI Error] HTTP or JSON error: " + std::string(e.what());
+                            errorMessage = "[AI Error] HTTP or JSON error: " + std::string(e.what());
                             success = false;
                         }
                     }
@@ -449,8 +449,8 @@ private:
                         std::lock_guard<std::mutex> lock(logMutex);
                         logMessages.push_back("OPERATOR: " + message);
                         if (success) {
-                            logMessages.push_back("[ATAK AI Raw Response] " + ollamaResponse);
-                            logMessages.push_back("[ATAK AI] " + aiText);
+                            logMessages.push_back("[AI Raw Response] " + ollamaResponse);
+                            logMessages.push_back("[AI] " + aiText);
 
                             json userMsgJson;
                             userMsgJson["role"] = "user";
@@ -483,7 +483,7 @@ private:
                 // Checkboxes inside the pop-out window
                 ImGui::Checkbox("VoxHunt", &voiceHuntActive);
                 ImGui::SameLine();
-                ImGui::Checkbox("W*A*L*t*E*R", &atakAiActive);
+                ImGui::Checkbox("W*A*L*T*E*R", &atakAiActive);
                 ImGui::Separator();
 
                 // Ollama Control in pop-out window
@@ -563,7 +563,7 @@ private:
                             tempMessages.push_back(userMessage);
 
                             if (!ollamaInitialized) {
-                                tempMessages.insert(tempMessages.begin(), json::parse(R"({"role": "system", "content": "You are a U.S. Navy S.E.A.L. on a covert SIGINT operation. Your callsign is ATAK. Be brief and professional. Report only significant, actionable intelligence. Otherwise, learn from the OPERATOR's instructions. When responding to the OPERATOR, be concise. End all transmissions with OVER."})"));
+                                tempMessages.insert(tempMessages.begin(), json::parse(R"({"role": "system", "content": "You are a U.S. Navy S.E.A.L. on a covert SIGINT operation. Your callsign is RADAR. Be brief and professional. Report only significant, actionable intelligence. Otherwise, learn from the OPERATOR's instructions. When responding to the OPERATOR, be concise. End all transmissions with OVER."})"));
                                 ollamaInitialized = true;
                             }
 
@@ -585,7 +585,7 @@ private:
                                 aiText = responseJson["message"]["content"].get<std::string>();
                                 success = true;
                             } catch (const std::exception& e) {
-                                errorMessage = "[ATAK AI Error] HTTP or JSON error: " + std::string(e.what());
+                                errorMessage = "[AI Error] HTTP or JSON error: " + std::string(e.what());
                                 success = false;
                             }
                         }
@@ -595,8 +595,8 @@ private:
                             std::lock_guard<std::mutex> lock(logMutex);
                             logMessages.push_back("OPERATOR: " + message);
                             if (success) {
-                                logMessages.push_back("[ATAK AI Raw Response] " + ollamaResponse);
-                                logMessages.push_back("[ATAK AI] " + aiText);
+                                logMessages.push_back("[AI Raw Response] " + ollamaResponse);
+                                logMessages.push_back("[AI] " + aiText);
 
                                 json userMsgJson;
                                 userMsgJson["role"] = "user";

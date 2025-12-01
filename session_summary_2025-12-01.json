@@ -1,0 +1,73 @@
+{
+  "session_date": "2025-12-01",
+  "project": "VoxHunt-SDR-W-A-L-T-E-R (SIGINT AI)",
+  "initial_state": "Agent was stuck in a loop, session context was lost.",
+  "summary": "This session involved extensive debugging, refactoring, and feature implementation for a C++ SDR++ module. We addressed critical stability issues, improved the user experience, simplified the codebase, and finalized the project for public release.",
+  "timeline": [
+    {
+      "step": 1,
+      "action": "Context Recovery",
+      "details": "Systematically drilled down through the project directory structure (`/home/blackb/SDR/ai/SDRPlusATX_AI/`) to identify the last modified file (`main.cpp`) and restore the working context."
+    },
+    {
+      "step": 2,
+      "action": "Bug Fix: UI Freeze on Startup",
+      "details": "Diagnosed a 10-second UI freeze caused by a `sleep_for` call on the main thread. The initial fix was to move this to a background thread, but this led to a more subtle deadlock.",
+      "resolution": "Refactored the startup monitoring logic (`monitorOllamaStartup`) to use fine-grained mutex locking, ensuring no locks are held during sleep, which resolved the deadlock and the UI freeze."
+    },
+    {
+      "step": 3,
+      "action": "Bug Fix: Build & Runtime Mismatch",
+      "details": "Diagnosed why code changes weren't appearing in the application. Discovered that the build process created the module binary in one directory, but the application was loading an old version from a separate `install_dir`. The user also identified a typo in the project path (`SDRPlusATX_AI` vs `SDRPlusATAX_AI`).",
+      "resolution": "Identified the need for `make install` to copy the compiled module to the correct runtime directory."
+    },
+    {
+      "step": 4,
+      "action": "Bug Fix: Incorrect Ollama Status",
+      "details": "The module's status for the Ollama server was unreliable (false positives and false negatives). The detection logic was iterated on, moving from `lsof | grep ollama` to a generic `lsof`, then to `netstat`, and finally to the most robust solution.",
+      "resolution": "Implemented a status check using `lsof -i :11434 | grep LISTEN`, which reliably checks for a process actively listening on the port, solving the status bug."
+    },
+    {
+      "step": 5,
+      "action": "Bug Fix: Scroll Wheel Input",
+      "details": "User reported that scrolling in the module's log window would also change the main SDR++ frequency.",
+      "resolution": "Added a check (`ImGui::IsWindowHovered`) to the `draw()` function to explicitly capture mouse input and prevent scroll events from propagating to the host application."
+    },
+    {
+      "step": 6,
+      "action": "Bug Fix: Chat Freeze on Send",
+      "details": "User reported a hard freeze when sending a chat message. Diagnosed a critical deadlock where the UI thread would lock a mutex and then, within that scope, try to lock it again after a network call.",
+      "resolution": "Refactored the chat handler logic to perform the network call *outside* of any mutex locks. A single lock is now used only after the network call is complete to safely update the log and message history."
+    },
+    {
+      "step": 7,
+      "action": "Refactor & Simplification",
+      "details": "Per user request, the module was simplified to focus only on detecting an external Ollama server. The functionality to start/stop the server from within the module was removed.",
+      "resolution": "Removed the `startOllama`, `stopOllama`, and `monitorOllamaStartup` functions, as well as the corresponding UI buttons and member variables."
+    },
+    {
+      "step": 8,
+      "action": "Feature: Model Unload & Warming",
+      "details": "User identified that switching to un-loaded Ollama models caused server-side errors. A feature was proposed and implemented to improve this.",
+      "resolution": "Created a `warmupModel` function that first sends a `keep_alive: 0` request to unload the previous model, then sends a dummy request to the new model to pre-warm it. The UI was updated to show the loading status and disable controls during this process."
+    },
+    {
+      "step": 9,
+      "action": "Documentation & Finalization",
+      "details": "The project was finalized for release.",
+      "resolution": [
+        "Created a `setup.sh` script to automate the download of model dependencies.",
+        "Updated the script to use a lightweight, recommended model (`phi`) for better accessibility.",
+        "Completely revised the `README.md` with accurate, detailed instructions for installation, setup (including Ollama), and usage.",
+        "Updated UI text elements ('ATAK SIGINT' -> 'SIGINT AI', 'ATAK AI' -> 'W*A*L*t*E*R', etc.) for branding and clarity.",
+        "Added a `.gitignore` file to the module to prevent committing large binary files."
+      ]
+    },
+    {
+      "step": 10,
+      "action": "Repository Cleanup",
+      "details": "Diagnosed a hanging `git push` command. Identified that the user's original repository history contained large binary files. The user's fresh clone was also hanging due to an authentication helper (`ksshaskpass`).",
+      "resolution": "Guided the user to clean their original repository using `git-filter-repo`. Switched to a fresh clone, fixed a submodule issue, and resolved the authentication problem by unsetting `SSH_ASKPASS` and advising on SSH key setup. The project was finally pushed to the new empty remote."
+    }
+  ]
+}
