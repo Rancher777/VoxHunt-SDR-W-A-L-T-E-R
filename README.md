@@ -31,9 +31,25 @@ When someone keys up and talks — W*A*L*t*E*R hears it and writes it down.
 
 ### Requirements
 - **Operating System:** Linux (the module relies on Linux-specific commands and APIs).
-- SDR++ (The module is built against the main branch)
-- A CUDA-capable NVIDIA GPU is recommended for Whisper.
-- [Ollama](https://ollama.com/) installed and running.
+- **SDR++:** The module is built against the main branch.
+- **NVIDIA GPU:** Recommended for Whisper transcription performance.
+- **Ollama:** Required for the W*A*L*t*E*R AI analysis feature.
+
+---
+
+### Ollama Setup (Recommended)
+
+For the AI features to work, you need to have Ollama installed and running.
+
+1.  **Install Ollama:** Download and install from the official website: [https://ollama.com/](https://ollama.com/)
+
+2.  **Run Ollama:** Ensure the Ollama application is running in the background.
+
+3.  **Download a Model:** This module is tested with `phi`, a lightweight but powerful model from Microsoft that runs well on most gaming GPUs. The `setup.sh` script will download this for you automatically. If you wish to do it manually, run:
+    ```bash
+    ollama pull phi
+    ```
+    Users with high-end GPUs (e.g., >24GB VRAM) can experiment with larger models like `llama3.1:70b` for potentially higher quality analysis.
 
 ---
 
@@ -44,22 +60,16 @@ When someone keys up and talks — W*A*L*t*E*R hears it and writes it down.
 You must clone this repository *with its submodules*. The `whisper.cpp` code is included as a submodule.
 ```bash
 git clone --recurse-submodules https://github.com/Rancher777/VoxHunt-SDR-W-A-L-T-E-R.git
-```
-Navigate into the main project directory:
-```bash
 cd VoxHunt-SDR-W-A-L-T-E-R
 ```
 
 **2. Run the Setup Script**
 
-The module requires several AI models to function. A setup script is provided to download them for you.
-
-Navigate to the module's directory and run the script:
+The provided script downloads the required AI models. Make sure Ollama is running before this step.
 ```bash
 cd misc_modules/atak_sigint/
 ./setup.sh
 ```
-This will download the `ggml-tiny.en.bin` Whisper model and pull the default Ollama models.
 
 **3. Build SDR++ and the Module**
 
@@ -76,7 +86,7 @@ The SDR++ build system will automatically find and compile the `SIGINT AI` modul
 
 **4. Run the Application**
 
-After the installation is complete, you can run SDR++ from your build directory:
+After installation, run SDR++ from your build directory:
 `./install_dir/bin/sdrpp`
 
 ---

@@ -16,15 +16,16 @@ fi
 echo "[+] Whisper model downloaded successfully."
 echo ""
 
-# Download Ollama Models
-echo "[*] Downloading Ollama models. This may take a while..."
-echo "    - Pulling qwen2.5-coder:32b-instruct-q6_k..."
-ollama pull qwen2.5-coder:32b-instruct-q6_k
-echo "    - Pulling gemma2:27b..."
-ollama pull gemma2:27b
-echo "    - Pulling llama3.1:70b..."
-ollama pull llama3.1:70b
-echo "[+] Ollama models pulled successfully."
+# Download Recommended Ollama Model
+echo "[*] Downloading recommended lightweight Ollama model (phi)..."
+ollama pull phi
+if [ $? -ne 0 ]; then
+    echo "[!] Failed to pull 'phi' model. Please ensure Ollama is installed and running."
+    exit 1
+fi
+echo "[+] Ollama model 'phi' pulled successfully."
 echo ""
 
 echo "=== Setup Complete ==="
+echo "You can now build SDR++ and run the module."
+echo "For more powerful hardware, you can manually pull other models (e.g., 'ollama pull llama3.1:70b')."
