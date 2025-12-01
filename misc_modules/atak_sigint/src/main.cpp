@@ -73,8 +73,22 @@ public:
     }
 
     void postInit() {
-        // Construct the absolute path to the Whisper model file
-        std::string modelPath = "/home/blackb/SDR/ai/SDRPlusATAX_AI/misc_modules/atak_sigint/ggml-tiny.en.bin";
+        // Determine path of model relative to the executable
+        std::string modelPath = "";
+        char exePath[PATH_MAX];
+        ssize_t len = readlink("/proc/self/exe", exePath, sizeof(exePath) - 1);
+        if (len != -1) {
+            exePath[len] = '\0';
+            std::string exeDir = std::string(exePath);
+            size_t lastSlash = exeDir.find_last_of("/");
+            if (lastSlash != std::string::npos) {
+                exeDir = exeDir.substr(0, lastSlash);
+            }
+            modelPath = exeDir + "/ggml-tiny.en.bin";
+        } else {
+            logMessages.push_back("[ERROR] Could not determine executable path. Cannot load Whisper model.");
+            return;
+        }
         
         logMessages.push_back("Loading Whisper model from: " + modelPath);
         whisperCtx = whisper_init_from_file(modelPath.c_str());
