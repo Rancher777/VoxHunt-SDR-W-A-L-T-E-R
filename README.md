@@ -6,11 +6,11 @@ This module integrates SDR++ with local AI models to continuously scan the spect
 
 When someone keys up and talks — W*A*L*t*E*R hears it and writes it down.
 
-### W*A*L*t*E*R
+### W.A.L.T.E.R
 **W**hisper
 **A**ssisted
 **L**istening
-**t**ranscription &
+**T**ranscription &
 **E**lectronic
 **R**econnaissance
 
@@ -22,7 +22,7 @@ When someone keys up and talks — W*A*L*t*E*R hears it and writes it down.
 ### Features
 - **Automatic Voice Detection:** The "VoxHunt" feature automatically detects voice transmissions.
 - **Real-Time Transcription:** Live transcription of signals using a local Whisper model.
-- **AI Analysis:** The "W*A*L*t*E*R" feature sends transcripts to a local Ollama LLM for analysis and summarization, based on a configurable system prompt.
+- **AI Analysis:** The "W.A.L.T.E.R" feature sends transcripts to a local Ollama LLM for analysis and summarization, based on a configurable system prompt.
 - **Model Management:**
     - Automatically detects available Ollama models.
     - "Model Warming" feature: When you select a new model from the dropdown, the module pre-loads it to prevent server errors, and unloads the previous model to conserve resources.
